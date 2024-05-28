@@ -21,22 +21,32 @@ GLsizei winWidth = 1080; // Window width (16:10 ratio)
 GLsizei winHeight = 660; // Window height (16:10 ratio)
 SocialForce *socialForce;
 float fps = 0; // Frames per second
-int currTime = 0;
-int startTime = 0;
+int currTime = 0; // = 0
+int startTime = 0; // = 0
 bool animate = false; // Animate scene flag
-float speedConsiderAsStop = 0.2;
+float speedConsiderAsStop = 0.2; // = 0.2
 
+//là một đối tượng json, có nội dung giống trong file input.json
 json inputData;
-std::map<std::string, std::vector<float>> mapData;
-std::vector<json> juncDataList;
-std::vector<float> juncData;
-std::string juncName;
-int juncIndex = 0;
-float walkwayWidth;
 
-int classificationType = 0;
+std::map<std::string, std::vector<float>> mapData; //là một map gồm tên giao lộ và chiều dài mở rộng của các giao lộ
 
-std::vector<int> numOfPeople;
+//
+std::vector<json> juncDataList; //vector chứa các đối tượng json của giao lộ
+
+std::vector<float> juncData; //vector chứa dữ liệu của giao lộ
+
+std::string juncName; //Tên giao lộ
+
+int juncIndex = 0; // Chỉ số giao lộ = 0
+
+float walkwayWidth; //chiều rộng lối đi
+
+int classificationType = 0; // = 0
+
+//chứa số lượng người có trong các luồng, size = inputData.size()
+std::vector<int> numOfPeople; 
+
 float minSpeed = -1;
 float maxSpeed = -1;
 int threshold = 0;
@@ -49,6 +59,8 @@ void createWalls();
 
 void createAgents();
 
+void createPedestrians();
+
 void createAGVs();
 
 void display();
@@ -60,7 +72,6 @@ void normalKey(unsigned char key, int xMousePos, int yMousePos);
 void update();
 
 
-/*
 int main(int argc, char **argv)
 {
     inputData = Utility::readInputData("data/input.json");
@@ -76,21 +87,22 @@ int main(int argc, char **argv)
             cout << "2. Junction" << endl;
             cout << "Your choice: ";
             getline(cin, input1);
-            if (input1 == "1")
+            if (input1 == "1") //chạy kịch bản ở hành lang
             {
-                walkwayWidth = (float)inputData["hallwayWidth"]["value"];
+                walkwayWidth = (float)inputData["hallwayWidth"]["value"]; //lấy chiều rộng lối đi trong inputJson
+                //chiều dài hành lanh
                 float length1Side = ((float)inputData["hallwayLength"]["value"]) / 2;
-                juncData = {length1Side, length1Side};
+                juncData = {length1Side, length1Side}; //lưu trữ chiều dài của hành lang trên và dưới
             }
-            else if (input1 == "2")
+            else if (input1 == "2") //chạy kịch bản chỉ định
             {
                 do
                 {
                     cout << "Please enter the junction you want to emulate" << endl;
                     cout << "(Press enter to randomly select a junction in the map)" << endl;
                     cout << "Your choice: ";
-                    getline(cin, juncName);
-                    if (juncName == "")
+                    getline(cin, juncName); //Nhập tên giao lộ
+                    if (juncName == "") //Kịch bản ngẫu nhiên
                     {
                         auto it = mapData.begin();
                         std::advance(it, Utility::randomInt(1, mapData.size() - 3));
@@ -98,13 +110,13 @@ int main(int argc, char **argv)
                         juncName.assign(random_key);
                     }
 
-                } while (mapData[juncName].size() < 3);
+                } while (mapData[juncName].size() < 3); //
                 juncData = mapData[juncName];
                 walkwayWidth = mapData["walkwayWidth"][0];
             }
         } while (input1 != "1" && input1 != "2");
     }
-    else if ((int)inputData["runMode"]["value"] == 0) 
+    else
     {
         juncDataList = Utility::convertMapData(mapData);
         float hallwayLength = juncDataList[juncIndex].items().begin().value();
@@ -146,12 +158,8 @@ int main(int argc, char **argv)
 
     return 0;
 }
-*/
-int main(int argc, char **argv) {
 
-}
 
-//------------------------------------------------//
 void init()
 {
     // General Light Intensity
@@ -374,12 +382,34 @@ void setAgentsFlow(Agent *agent, float desiredSpeed, float maxSpeed, float minSp
 
 void createAgents()
 {
+    //đối tượng Agent
     Agent *agent;
 
-    float deviationParam = randomFloat(1 - (float)inputData["experimentalDeviation"]["value"] / 100, 1 + (float)inputData["experimentalDeviation"]["value"] / 100);
-    // cout << "Deviation: "<< deviationParam <<" - Num agents: "<< int(int(inputData["numOfAgents"]["value"]) * deviationParam) << endl;
+
+    //inputData là một đối tượng json, có nội dung giống trong file input.json
+    
+
+    //độ lệch thực nghiệm
+    float deviation = (float)inputData["experimentalDeviation"]["value"] / 100;
+
+    //deviationParam là một gía trị ngẫu nhiên thuộc (1-deviation, 1+deviation)
+    float deviationParam = randomFloat(1 - deviation, 1 + deviation);
+    
+    //juncData?
+    //deviationParam?
+
     numOfPeople = Utility::getNumPedesInFlow(juncData.size(), int(int(inputData["numOfAgents"]["value"]) * deviationParam));
+    
+    //classificationType?
+    //inputData?
+    //deviationParam?
+    
+    //function getPedesVelocity?
+    //danh sách vận tốc
     vector<double> velocityList = Utility::getPedesVelocity(classificationType, inputData, deviationParam);
+    
+    //velocityList?
+    //what doing?
     if (classificationType == 0)
     {
         minSpeed = 0.52;
@@ -390,35 +420,13 @@ void createAgents()
         minSpeed = velocityList[0];
         maxSpeed = velocityList[velocityList.size() - 1];
     }
-
+    //default_random_engine?
+    //shuffle?
     auto rng = std::default_random_engine{};
     std::shuffle(velocityList.begin(), velocityList.end(), rng);
-
     int pedesCount = 0;
 
-    // test
-
-    // for (int temp = 0; temp < 3; temp++)
-    // {
-    //     agent = new Agent;
-    //     // setAgentsFlow(agent, 1, maxSpeed, minSpeed, Point3f(randomFloat(-3.0, -2.0), randomFloat(9.0, 10.0), 0.0), Point3f(randomFloat(-3.2, -2.8), randomFloat(-2.2, -1.8), 0.0));
-    //     agent->setPosition(randomFloat(-3.0, -2.0), randomFloat(9.0, 10.0));
-    //     // // float x = randomFloat(-13.3F, -6.0);
-    //     // // float y = randomFloat(-2.0, 2.0);
-    //     float x = randomFloat(-3.2, -2.8);
-    //     float y = randomFloat(-2.2, -1.8);
-    //     agent->setPath(x, y, 2);
-    //     agent->setDestination(x, y);
-    //     // // agent->setPath(randomFloat(22.0, 25.0), randomFloat(-3.0, -2.0), 1.0);
-    //     agent->setDesiredSpeed(1);
-    //     agent->setStopAtCorridor(true);
-    //     std::vector<float> color = Utility::getPedesColor(maxSpeed, minSpeed, agent->getDesiredSpeed(), classificationType);
-    //     agent->setColor(color[0], color[1], color[2]);
-    //     socialForce->addAgent(agent);
-    // }
-
-    // test
-
+    //what doing?
     if (juncData.size() == 2)
     {
         for (int idx = 0; idx < 6; idx++)
@@ -455,6 +463,13 @@ void createAgents()
             }
         }
     }
+}
+
+void createPedestrians() 
+{
+    Pedestrian *pedestrian;
+
+
 }
 
 void createAGVs()
@@ -810,8 +825,4 @@ void update()
     computeFPS(&fps);
     glutPostRedisplay();
     glutIdleFunc(update); // Continuously execute 'update()'
-}
-
-void bai3 () {
-
 }
