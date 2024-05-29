@@ -1,5 +1,9 @@
+#ifndef PEDESTRIAN_H
+#define PEDESTRIAN_H
+
 #include <vector>
 #include "src/AGVEvent/AGVEvent.h"
+#include <random>
 using namespace std;
 
 class Point
@@ -24,6 +28,15 @@ enum class Walkability {
     blind
 };
 
+Walkability getRandomWalkability() {
+    int ranNumber = randomInt(0, 4);
+    if (ranNumber == 0) return Walkability::noDisability;
+    if (ranNumber == 1) return Walkability::crutches;
+    if (ranNumber == 2) return Walkability::sticks;
+    if (ranNumber == 3) return Walkability::wheelchairs;
+    return Walkability::blind;
+}
+
 class Emotion {
 public:
     double pleasure = 0.75;
@@ -42,8 +55,8 @@ class Personality
 };
 
 
-class Pedestrian 
-{
+class Pedestrian
+{ 
 private:
     int ID;
     Ward start;
@@ -61,3 +74,5 @@ private:
 //public:
     //method
 };
+
+#endif

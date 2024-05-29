@@ -9,6 +9,11 @@
 #include <map>
 #include "src/agv/AGV.h"
 
+//update lib in here"
+#include "src/model/SocialForce.h"
+
+//***//
+
 using json = nlohmann::json;
 
 #pragma once
@@ -33,6 +38,11 @@ namespace Utility
         int totalRunningTime);
 
     std::vector<int> getNumPedesInFlow(int junctionType, int totalPedestrian);
+
+    //update code in here//
+    std::vector<Pedestrian*> getRanPedes(int totalPedestrian);
+    
+    //***//
 
     std::vector<double> getPedesVelocity(int type, json inputData, float deviationParam);
 

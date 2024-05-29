@@ -1,5 +1,11 @@
+#ifndef PATIENT_H
+#define PATIENT_H
+
 #include "src/Pedestrian/pedestrian.h"
 
 class Patient : public Pedestrian {
-    enum Walkability walkability;
+public:
+    Walkability walkability;
 };
+
+#endif

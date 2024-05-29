@@ -70,15 +70,14 @@ void reshape(int width, int height);
 void normalKey(unsigned char key, int xMousePos, int yMousePos);
 
 void update();
-
-
+/*
 int main(int argc, char **argv)
 {
     inputData = Utility::readInputData("data/input.json");
     mapData = Utility::readMapData("data/map.txt");
-    std::string input1;
+    std::string input1; //kịch bản
 
-    if ((int)inputData["runMode"]["value"] == 0)
+    if ((int)inputData["runMode"]["value"] == 0) //chế độ runMode = 0
     {
         do
         {
@@ -86,7 +85,7 @@ int main(int argc, char **argv)
             cout << "1. Hallway" << endl;
             cout << "2. Junction" << endl;
             cout << "Your choice: ";
-            getline(cin, input1);
+            getline(cin, input1); //lựa chọn kịch bản
             if (input1 == "1") //chạy kịch bản ở hành lang
             {
                 walkwayWidth = (float)inputData["hallwayWidth"]["value"]; //lấy chiều rộng lối đi trong inputJson
@@ -102,35 +101,38 @@ int main(int argc, char **argv)
                     cout << "(Press enter to randomly select a junction in the map)" << endl;
                     cout << "Your choice: ";
                     getline(cin, juncName); //Nhập tên giao lộ
-                    if (juncName == "") //Kịch bản ngẫu nhiên
+                    if (juncName == "") //Kịch bản ngẫu nhiên nếu không nhập gì
                     {
-                        auto it = mapData.begin();
-                        std::advance(it, Utility::randomInt(1, mapData.size() - 3));
-                        std::string random_key = it->first;
-                        juncName.assign(random_key);
+                        auto it = mapData.begin(); //it trỏ tới phần tử đầu tiên của map
+                        std::advance(it, Utility::randomInt(1, mapData.size() - 3)); //lấy random
+                        std::string random_key = it->first; //ramdom_key là con trỏ trỏ tới phần tử ngẫu nhiên trong đối trượng mapjson
+
+                        juncName.assign(random_key); //sẽ là một trong các giao lộ ở file map.txt
                     }
 
-                } while (mapData[juncName].size() < 3); //
-                juncData = mapData[juncName];
-                walkwayWidth = mapData["walkwayWidth"][0];
+                } while (mapData[juncName].size() < 3); //yêu cầu nhập lại nếu dữ liệu của giao lộ vừa nhập bé hơn 3
+                juncData = mapData[juncName]; //lấy dữ liệu chiều dài của giao lộ
+                walkwayWidth = mapData["walkwayWidth"][0]; //tính toán chiều rộng của lối đi
             }
-        } while (input1 != "1" && input1 != "2");
+        } while (input1 != "1" && input1 != "2"); //chỉ có 2 lựa chọn cho kịch bản
     }
-    else
+    else //chế độ runMode = 1, kịch bản ở hành lang
     {
         juncDataList = Utility::convertMapData(mapData);
+        //chiều dài lối đi
         float hallwayLength = juncDataList[juncIndex].items().begin().value();
 
         walkwayWidth = (float)inputData["hallwayWidth"]["value"];
         float length1Side = (hallwayLength) / 2;
-        juncData = {length1Side, length1Side};
+        juncData = {length1Side, length1Side}; //dữ liệu chiều dài cạnh trên và cạnh dưới
     }
 
 
     float deviationParam = randomFloat(1 - (float)inputData["experimentalDeviation"]["value"] / 100, 1 + (float)inputData["experimentalDeviation"]["value"] / 100);
-    // Threshold people stopping at the corridor
+    //Ngưỡng người dừng ở hành lang
     threshold = int(inputData["numOfAgents"]["value"]) * deviationParam * (float)(inputData["stopAtHallway"]["value"]) / 100;
 
+    //Xây dựng đồ họa với dữ liệu trên
     glutInit(&argc, argv); // Initialize GLUT
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA |
                         GLUT_DEPTH);         // Set display mode  Default mode used
@@ -158,8 +160,16 @@ int main(int argc, char **argv)
 
     return 0;
 }
+*/
 
+int main(int argc, char **argv) {
+    inputData = Utility::readInputData("data/input.json");
+    if ((int)inputData["runMode"]["value"] != 3) {
+        cerr << "Khong co kich ban nay" << endl;
+        return -1;
+    }
 
+}
 void init()
 {
     // General Light Intensity
@@ -468,6 +478,7 @@ void createAgents()
 void createPedestrians() 
 {
     Pedestrian *pedestrian;
+    numOfPeople = Utility::getNumPedesInFlow(juncData.size(), int(int(inputData["numOfAgents"]["value"])));
 
 
 }
@@ -684,8 +695,9 @@ void update()
     frameTime = currTime - prevTime;
     prevTime = currTime;
 
-    int count_agents = 0, count_agvs = 0;
-
+    int count_agents = 0; //số lượng người đi bộ
+    int count_agvs = 0; //số lượng AGV
+    //Danh sách người đi bộ
     std::vector<Agent *> agents = socialForce->getCrowd();
     for (Agent *agent : agents)
     {
@@ -730,6 +742,7 @@ void update()
         }
     }
 
+    //Danh sách AGV
     std::vector<AGV *> agvs = socialForce->getAGVs();
     for (AGV *agv : agvs)
     {
@@ -798,6 +811,7 @@ void update()
             count_agvs = count_agvs + 1;
         }
     }
+
     if (count_agvs == agvs.size())
     {
         int totalRunningTime = currTime - startTime;

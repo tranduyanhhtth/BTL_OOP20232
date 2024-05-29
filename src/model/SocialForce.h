@@ -4,6 +4,14 @@
 #include "src/agv/AGV.h"
 #include "src/agent/Agent.h"
 #include "src/wall/Wall.h"
+
+//update lib in here//
+#include "src/Personel/personel.h"
+#include "src/Patient/patient.h"
+#include "src/Visitor/visitor.h"
+
+//***//
+
 #include <vector>
 #include <algorithm>
 
