@@ -21,6 +21,11 @@ private:
     std::vector<Wall *> walls;
     std::vector<AGV *> agvs;
 
+    //update code in here//
+    std::vector<Ward *> wards;
+    std::vector<Pedestrian *> pedestrians;
+    //***//
+
 public:
     // SocialForce();
     ~SocialForce();
@@ -28,6 +33,12 @@ public:
     void addAgent(Agent *agent);
 
     void addWall(Wall *wall);
+
+    //update
+    void addWard(Ward *wrad);
+
+    //update
+    void addPedestrian(Pedestrian *pedestrian);
 
     void addAGV(AGV *agv);
 
@@ -47,6 +58,13 @@ public:
     void removeCrowd(); // Remove all individuals and groups
     void removeWalls();
 
+    //update
+    void removeWards();
+
+    //update
+    void removePedestrians();
+
+    
     void removeAGV();
     void removeAGVs();
 

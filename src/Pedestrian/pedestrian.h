@@ -32,7 +32,7 @@ class Personality
 class Pedestrian
 { 
 private:
-    int ID;
+    static int ID;
     Ward start;
     Ward end;
     vector<Ward> journey;

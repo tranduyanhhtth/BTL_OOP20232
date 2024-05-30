@@ -2,7 +2,13 @@
 #define WARD_H
 
 #include <string>
-#include "src/Point/Point.h"
+using namespace std;
+
+class Point
+{
+    double x;
+    double y;
+};
 
 class Ward 
 {

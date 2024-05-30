@@ -11,6 +11,8 @@ SocialForce::~SocialForce()
 
 void SocialForce::addAgent(Agent *agent) { crowd.push_back(agent); }
 
+//update
+void SoicalForce::addPedestrian(Pedestrian *pedestrian) {pedestrians.push_back(pedestrian); }
 void SocialForce::addWall(Wall *wall) { walls.push_back(wall); }
 
 void SocialForce::addAGV(AGV *agv) { agvs.push_back(agv); }
@@ -39,6 +41,20 @@ void SocialForce::removeWalls()
         delete walls[idx];
 
     walls.clear();
+}
+
+//update
+void SocialForce::removeWards()
+{
+    for (unsigned int idx = 0; idx < walls.size(); idx++)
+        delete wards[idx];
+
+    wards.clear();
+}
+
+void SocialForce::removePedestrians()
+{
+
 }
 
 void SocialForce::removeAGV()
