@@ -57,6 +57,10 @@ void init();
 
 void createWalls();
 
+//update code in here
+void createWard();
+
+//******//
 void createAgents();
 
 void createPedestrians();
@@ -473,50 +477,55 @@ void createAgents()
     }
 }
 
+void createWard()
+{
+    
+}
+
 void createPedestrians() 
 {
-    vector<Pedestrian*> pedestrian;
-    int totalPedestrian = (int)inputData["numOfAgents"]["value"];
+    // vector<Pedestrian*> pedestrian;
+    // int totalPedestrian = (int)inputData["numOfAgents"]["value"];
     
-    int numPersonal = 0;
-    int numNoDisability = 0;
-    for (int i = 0; i < totalPedestrian; i++) {
-        int ranNumber = randomInt(0, 2);
-        if (ranNumber == 0) //create Visitor
-        {
-            Visitor* vistor = new Visitor();
-            vistor->walkability = getRandomWalkability();
-            if (vistor->walkability == Walkability::noDisability)
-            {
-                numNoDisability++;
-            }
-            pedestrian.push_back(vistor);
-        }
-        else if (ranNumber == 1) //create Patient
-        {
-            Patient* patient = new Patient();
-            patient->walkability = getRandomWalkability();
-            if (patient->walkability == Walkability::noDisability)
-            {
-                numNoDisability++;
-            }
-            pedestrian.push_back(patient);
+    // int numPersonal = 0;
+    // int numNoDisability = 0;
+    // for (int i = 0; i < totalPedestrian; i++) {
+    //     int ranNumber = randomInt(0, 2);
+    //     if (ranNumber == 0) //create Visitor
+    //     {
+    //         Visitor* vistor = new Visitor();
+    //         vistor->walkability = Walkability::noDisability;
+    //         if (vistor->walkability == Walkability::noDisability)
+    //         {
+    //             numNoDisability++;
+    //         }
+    //         pedestrian.push_back(vistor);
+    //     }
+    //     else if (ranNumber == 1) //create Patient
+    //     {
+    //         Patient* patient = new Patient();
+    //         patient->walkability = Walkability::noDisability;
+    //         if (patient->walkability == Walkability::noDisability)
+    //         {
+    //             numNoDisability++;
+    //         }
+    //         pedestrian.push_back(patient);
 
-        }
-        else
-        {
-            if (numPersonal < numNoDisability) //create Personal
-            {
-                Personal* personal = new Personal();
-                numPersonal++;
-                pedestrian.push_back(personal);
-            }
-            else
-            {
-                i--; //again
-            }
-        }
-    }
+    //     }
+    //     else
+    //     {
+    //         if (numPersonal < numNoDisability) //create Personal
+    //         {
+    //             Personal* personal = new Personal();
+    //             numPersonal++;
+    //             pedestrian.push_back(personal);
+    //         }
+    //         else
+    //         {
+    //             i--; //again
+    //         }
+    //     }
+    // }
 
 
 }

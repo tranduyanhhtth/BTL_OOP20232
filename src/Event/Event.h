@@ -7,4 +7,6 @@ class Event
     //time
 };
 
+class AGVEvent : public Event {};
+
 #endif //EVENT_H

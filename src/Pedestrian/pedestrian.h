@@ -2,14 +2,11 @@
 #define PEDESTRIAN_H
 
 #include <vector>
-#include "src/AGVEvent/AGVEvent.h"
+#include "src/Event/Event.h"
 #include "src/utility/Utility.h"
-
-using namespace Utility;
-using namespace std;
-
 #include "src/Ward/Ward.h"
-#include "src/Emotion/Emotion.h"
+
+using namespace std;
 
 enum class Walkability {
     noDisability,
@@ -19,7 +16,15 @@ enum class Walkability {
     blind
 };
 
-Walkability getRandomWalkability();
+class Emotion {
+public:
+    double pleasure = 0.75;
+    double surprise = 0.5;
+    double anger = -0.2;
+    double fear = -0.2;
+    double hate = -0.4;
+    double sad = -0.4;
+};
 
 class Personality
 {
@@ -47,5 +52,22 @@ private:
     Point tempPoints;
 //public:
 };
+
+class Personal : public Pedestrian
+{
+public:
+    Personal();
+};
+
+class Visitor : public Pedestrian {
+public:
+    Walkability walkability;
+};
+
+class Patient : public Pedestrian {
+public:
+    Walkability walkability;
+};
+
 
 #endif

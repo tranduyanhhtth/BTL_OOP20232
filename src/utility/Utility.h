@@ -40,9 +40,6 @@ namespace Utility
     std::vector<int> getNumPedesInFlow(int junctionType, int totalPedestrian);
 
     //update code in here//
-    int randomInt(int lowerBound, int upperBound);
-
-    std::vector<Pedestrian*> getRanPedes(int totalPedestrian);
     
     //***//
 

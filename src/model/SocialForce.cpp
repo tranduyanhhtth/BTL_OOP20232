@@ -7,13 +7,17 @@ SocialForce::~SocialForce()
     removeCrowd();
     removeWalls();
     removeAGVs();
+    removeWards();
 }
 
 void SocialForce::addAgent(Agent *agent) { crowd.push_back(agent); }
 
 //update
-void SoicalForce::addPedestrian(Pedestrian *pedestrian) {pedestrians.push_back(pedestrian); }
+
+
 void SocialForce::addWall(Wall *wall) { walls.push_back(wall); }
+
+//update
 
 void SocialForce::addAGV(AGV *agv) { agvs.push_back(agv); }
 

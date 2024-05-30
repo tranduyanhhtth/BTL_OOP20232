@@ -6,10 +6,8 @@
 #include "src/wall/Wall.h"
 
 //update lib in here//
-#include "src/Personel/personel.h"
-#include "src/Patient/patient.h"
-#include "src/Visitor/visitor.h"
-
+#include "src/Ward/Ward.h"
+#include "src/Pedestrian/pedestrian.h"
 //***//
 
 #include <vector>
@@ -22,8 +20,8 @@ private:
     std::vector<AGV *> agvs;
 
     //update code in here//
-    std::vector<Ward *> wards;
-    std::vector<Pedestrian *> pedestrians;
+    std::vector<Ward*> wards;
+    std::vector<Pedestrian *> pedestrian;
     //***//
 
 public:
@@ -38,7 +36,7 @@ public:
     void addWard(Ward *wrad);
 
     //update
-    void addPedestrian(Pedestrian *pedestrian);
+    void addPedestrian(Pedestrian *someone);
 
     void addAGV(AGV *agv);
 
@@ -64,7 +62,7 @@ public:
     //update
     void removePedestrians();
 
-    
+
     void removeAGV();
     void removeAGVs();
 
