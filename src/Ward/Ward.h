@@ -36,7 +36,6 @@ private:
     Point exitPlus; //for A
 
     Point pointA, pointB, pointC, pointD;
-    Wall a, b, c, d;
 public:
     Ward();
 

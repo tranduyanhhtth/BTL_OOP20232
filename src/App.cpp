@@ -178,8 +178,7 @@ void init()
 {
     // General Light Intensity
     GLfloat gnrlAmbient[] = {
-        0.8F, 0.8F, 0.8F,
-        1.0}; // Ambient (R, G, B, A) light intensity of entire scene
+        0.8F, 0.8F, 0.8F, 1.0}; // Ambient (R, G, B, A) light intensity of entire scene
 
     // Object Light Intensity
     GLfloat lghtDiffuse[] = {0.7F, 0.7F, 0.7F,
@@ -484,50 +483,6 @@ void createWard()
 
 void createPedestrians() 
 {
-    // vector<Pedestrian*> pedestrian;
-    // int totalPedestrian = (int)inputData["numOfAgents"]["value"];
-    
-    // int numPersonal = 0;
-    // int numNoDisability = 0;
-    // for (int i = 0; i < totalPedestrian; i++) {
-    //     int ranNumber = randomInt(0, 2);
-    //     if (ranNumber == 0) //create Visitor
-    //     {
-    //         Visitor* vistor = new Visitor();
-    //         vistor->walkability = Walkability::noDisability;
-    //         if (vistor->walkability == Walkability::noDisability)
-    //         {
-    //             numNoDisability++;
-    //         }
-    //         pedestrian.push_back(vistor);
-    //     }
-    //     else if (ranNumber == 1) //create Patient
-    //     {
-    //         Patient* patient = new Patient();
-    //         patient->walkability = Walkability::noDisability;
-    //         if (patient->walkability == Walkability::noDisability)
-    //         {
-    //             numNoDisability++;
-    //         }
-    //         pedestrian.push_back(patient);
-
-    //     }
-    //     else
-    //     {
-    //         if (numPersonal < numNoDisability) //create Personal
-    //         {
-    //             Personal* personal = new Personal();
-    //             numPersonal++;
-    //             pedestrian.push_back(personal);
-    //         }
-    //         else
-    //         {
-    //             i--; //again
-    //         }
-    //     }
-    // }
-
-
 }
 
 void createAGVs()
