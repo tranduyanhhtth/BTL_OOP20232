@@ -275,62 +275,9 @@ std::vector<int> Utility::getNumPedesInFlow(int junctionType,
     return v;
 }
 
-//update code in here///
-//Khởi tạo danh sách Pedestrian với số lượng các đối tượng Personal, Visitor, Patient là ngẫu nhiên
-std::vector<Pedestrian*> Utility::getRanPedes(int totalPedestrian)
-{
-    std::vector<Pedestrian*> v;
-    
-    int noDisability = 0;
-    int numPersonal = 0;
-    for (int i = 0; i < totalPedestrian; i++) {
-        int role = randomInt(0, 2);
-        if (role == 0) 
-        {
-            //create Visitor
-            Visitor* visitor = new Visitor();
-            visitor->walkability = getRandomWalkability();
-            v.push_back(visitor);
+//update code in here//
 
-            if (visitor->walkability == Walkability::noDisability)
-            {
-                noDisability++;
-            }
-            continue;
-        } 
-        else if (role == 1) 
-        {
-            //create Patient
-            Patient* patient = new Patient();
-            patient->walkability = getRandomWalkability();
-            v.push_back(patient);
-
-            if (patient->walkability == Walkability::noDisability)
-            {
-                noDisability++;
-            }
-            continue;
-        } 
-        else //role == 2
-        {
-            if (numPersonal < noDisability) 
-            {
-                //create Personal
-                Personal* personal;
-                personal = new Personal();
-                numPersonal++;
-                v.push_back(personal);
-                continue;
-            }
-            else
-            {
-                i--; //set role again
-            }
-        }
-    }
-    return v;
-}
-//***//
+//****
 // get list velocity of all pedestrians: type 0 - Discrete distribution, type 1
 // - T distribution
 std::vector<double> Utility::getPedesVelocity(int type, json inputData,
