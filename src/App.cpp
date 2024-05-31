@@ -17,7 +17,7 @@ using namespace Renderer;
 using json = nlohmann::json;
 
 // Global Variables
-GLsizei winWidth = 1080; // Window width (16:10 ratio)
+GLsizei winWidth = 1600; // Window width (16:10 ratio)
 GLsizei winHeight = 660; // Window height (16:10 ratio)
 SocialForce *socialForce;
 float fps = 0; // Frames per second
@@ -55,11 +55,11 @@ int threshold = 0;
 // Function Prototypes
 void init();
 
-void createWalls();
+// void createWalls();
+//update code in here 
+void createWalls_hospital();
 
-//update code in here
-void createWard();
-
+void createLabel();
 //******//
 void createAgents();
 
@@ -74,7 +74,7 @@ void reshape(int width, int height);
 void normalKey(unsigned char key, int xMousePos, int yMousePos);
 
 void update();
-/*
+
 int main(int argc, char **argv)
 {
     inputData = Utility::readInputData("data/input.json");
@@ -164,16 +164,167 @@ int main(int argc, char **argv)
 
     return 0;
 }
-*/
 
-int main(int argc, char **argv) {
-    inputData = Utility::readInputData("data/input.json");
-    if ((int)inputData["runMode"]["value"] != 3) {
-        cerr << "Khong co kich ban nay" << endl;
-        return -1;
+
+// int main(int argc, char **argv) {
+//     inputData = Utility::readInputData("data/input.json");
+//     if ((int)inputData["runMode"]["value"] != 3) {
+//         cerr << "Khong co kich ban nay" << endl;
+//         return -1;
+//     }
+// }
+
+void createWalls_hospital(){
+    vector<Point> wallCoordinates = genAroundWard();
+    vector<Ward> wards = genWard();
+    Wall *wall;
+
+    /****Create around wall****/
+    //upper wall
+    wall = new Wall(wallCoordinates[3].x,wallCoordinates[3].y-1,wallCoordinates[0].x,wallCoordinates[0].y-1);
+    wall->setWallColor(255,0,0);
+    socialForce->addWall(wall);
+    
+    //lower wall
+    wall = new Wall(wallCoordinates[2].x,wallCoordinates[2].y+1,wallCoordinates[1].x,wallCoordinates[1].y+1);
+    wall->setWallColor(255,0,0);
+    socialForce->addWall(wall);
+    
+    //left wall
+    wall = new Wall(wallCoordinates[2].x,wallCoordinates[2].y+1,wallCoordinates[3].x,(wallCoordinates[2].y+1 + wallCoordinates[3].y-1) / 2 - 0.5);
+    wall->setWallColor(255,0,0);
+    socialForce->addWall(wall);
+
+    wall = new Wall(wallCoordinates[3].x,(wallCoordinates[2].y+1 + wallCoordinates[3].y-1) / 2 + 0.5, wallCoordinates[3].x,wallCoordinates[3].y-1);
+    wall->setWallColor(255,0,0);
+    socialForce->addWall(wall);
+    //left wall
+    
+    //right wall
+    wall = new Wall(wallCoordinates[0].x,wallCoordinates[0].y-1,wallCoordinates[1].x,(wallCoordinates[0].y-1 + wallCoordinates[1].y+1) / 2 + 0.5);
+    wall->setWallColor(255,0,0);
+    socialForce->addWall(wall);
+
+    wall = new Wall(wallCoordinates[1].x,(wallCoordinates[0].y-1 + wallCoordinates[1].y+1) / 2 - 0.5, wallCoordinates[1].x,wallCoordinates[1].y+1);
+    wall->setWallColor(255,0,0);
+    socialForce->addWall(wall);
+    //right wall
+
+    // Create walls for wards
+    for(int i = 0; i < wards.size(); ++i){
+        Ward ward = wards[i];
+        vector<Point> wallCoordinates = ward.getWallCoordinates();
+        vector<pair<Point,Point>> entry = ward.getEntry();
+        vector<pair<Point,Point>> exit = ward.getExit();
+        string name = ward.getName();
+        
+        //cout << name << endl;
+        
+        if(i != wards.size()-1){
+            /*top*/
+            wall = new Wall(wallCoordinates[0].x, wallCoordinates[0].y, entry[0].first.x, entry[0].first.y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+
+            wall = new Wall(entry[0].second.x, entry[0].second.y, wallCoordinates[(0+1)%4].x, wallCoordinates[(0+1)%4].y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+            /*top*/
+            
+            /*bottom*/
+            wall = new Wall(wallCoordinates[2].x, wallCoordinates[2].y, exit[0].second.x, exit[0].second.y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+
+            wall = new Wall(exit[0].first.x, exit[0].first.y, wallCoordinates[(2+1)%4].x, wallCoordinates[(2+1)%4].y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+            /*bottom*/
+            
+            /*right*/
+            wall = new Wall(wallCoordinates[1].x, wallCoordinates[1].y, wallCoordinates[(1+1)%4].x, wallCoordinates[(1+1)%4].y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+            
+            /*left*/
+            wall = new Wall(wallCoordinates[3].x, wallCoordinates[3].y, wallCoordinates[(3+1)%4].x, wallCoordinates[(3+1)%4].y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+        } else {
+            /*top*/
+            wall = new Wall(wallCoordinates[0].x, wallCoordinates[0].y, entry[0].first.x, entry[0].first.y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+
+            wall = new Wall(entry[0].second.x, entry[0].second.y, wallCoordinates[(0+1)%4].x, wallCoordinates[(0+1)%4].y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+            /*top*/
+            
+            /*bottom*/
+            wall = new Wall(wallCoordinates[2].x, wallCoordinates[2].y, exit[0].second.x, exit[0].second.y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+
+            wall = new Wall(exit[0].first.x, exit[0].first.y, wallCoordinates[(2+1)%4].x, wallCoordinates[(2+1)%4].y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+            /*bottom*/
+
+            /*left*/
+            wall = new Wall(wallCoordinates[0].x, wallCoordinates[0].y, entry[1].second.x, entry[1].second.y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+
+            wall = new Wall(entry[1].first.x, entry[1].first.y, wallCoordinates[(2+1)%4].x, wallCoordinates[(2+1)%4].y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+            /*left*/
+            
+            /*right*/
+            wall = new Wall(wallCoordinates[1].x, wallCoordinates[1].y, exit[1].second.x, exit[1].second.y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+
+            wall = new Wall(exit[1].first.x, exit[1].first.y, wallCoordinates[(1+1)%4].x, wallCoordinates[(1+1)%4].y);
+            wall->setWallColor(255,255,0);
+            socialForce->addWall(wall);
+            /*right*/
+        }
     }
-
 }
+
+void createLabel(){
+    vector<Ward> wards= genWard();
+    for(Ward ward : wards){
+        int num = 1;
+        vector<pair<Point,Point>> entry = ward.getEntry();
+        vector<pair<Point,Point>> exit = ward.getExit();
+        string name = ward.getName();
+        for (pair<Point,Point> point : entry){
+            string entrName = name + to_string(num);
+            if(name == "A"&& num == 2) {
+                drawText(point.first.x,point.first.y,entrName.c_str());
+            } else { 
+                drawText(point.second.x-0.3,point.second.y-0.5,entrName.c_str());
+            }
+            ++num;
+        }
+        
+        for (pair<Point,Point> point : exit){
+            string exitName = name + to_string(num);
+            if(name == "A"&& num == 3) {
+                drawText(point.first.x,point.first.y,exitName.c_str());
+            } else if(name == "A" && num == 4) {
+                drawText(point.second.x-0.6,point.second.y-0.5,exitName.c_str());
+            } else {    
+                drawText(point.second.x-0.3,point.second.y,exitName.c_str());
+            }
+            ++num;
+        }
+    }
+}
+
 void init()
 {
     // General Light Intensity
@@ -181,14 +332,12 @@ void init()
         0.8F, 0.8F, 0.8F, 1.0}; // Ambient (R, G, B, A) light intensity of entire scene
 
     // Object Light Intensity
-    GLfloat lghtDiffuse[] = {0.7F, 0.7F, 0.7F,
-                             1.0}; // Diffuse (R, G, B, A) light intensity
+    GLfloat lghtDiffuse[] = {0.7F, 0.7F, 0.7F, 1.0}; // Diffuse (R, G, B, A) light intensity
 
     // Light Position
     GLfloat lghtPosition[] = {4.0, -4.0, 4.0, 0.0};
 
-    glClearColor(1.0, 1.0, 1.0,
-                 0.0);       // Set color used when color buffer cleared
+    glClearColor(1.0, 1.0, 1.0, 0.0);       // Set color used when color buffer cleared
     glShadeModel(GL_SMOOTH); // Set shading option
 
     // General Lighting
@@ -215,11 +364,12 @@ void init()
     srand(1604010629); // Seed to generate random numbers
 
     socialForce = new SocialForce;
-    createWalls();
+    createWalls_hospital(); // new 
+    // createWalls(); // old  
     createAgents();
     createAGVs();
 }
-
+/*
 void createWalls()
 {
     Wall *wall;
@@ -280,7 +430,7 @@ void createWalls()
         socialForce->addWall(wall);
     }
 }
-
+*/
 void setAgentsFlow(Agent *agent, float desiredSpeed, float maxSpeed, float minSpeed, int caseJump)
 {
     // if (socialForce->getCrowdSize() < threshold)
@@ -646,6 +796,7 @@ void display()
     glScalef(1.0, 1.0, 1.0);
 
     drawAgents(socialForce);
+    createLabel();
     drawAGVs(socialForce, juncData, (int)inputData["runConcurrently"]["value"], (int)inputData["runMode"]["value"]);
     drawWalls(socialForce);
     glPopMatrix();
@@ -806,7 +957,8 @@ void update()
                     }
                     float length1Side = (hallwayLength) / 2;
                     juncData = {length1Side, length1Side};
-                    createWalls();
+                    createWalls_hospital(); // new 
+                    // createWalls(); // old 
                     // cout << agv->getId() << " - Remove and re-create agent" << endl;
                 }
             }

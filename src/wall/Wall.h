@@ -11,12 +11,16 @@ struct Line {
 class Wall {
 private:
     Line wall;
+    Color3f colorWall;
 
 public:
     Wall();
 
     Wall(float x1, float y1, float x2, float y2);
     //~Wall();
+
+    void setWallColor(float red, float green, float blue);
+    Color3f getWallColor() const { return colorWall; }
 
     Point3f getStartPoint() const { return wall.start; }
 
